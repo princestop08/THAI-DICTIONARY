@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0d7a6f">
+<title>泰文單字速查</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@600&family=Noto+Sans+Thai:wght@400;600" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-lite-webfont@1.1.0/style.css" rel="stylesheet">
+<style>
+:root{--bg:#f3f6f7;--card:#fff;--ink:#12262b;--sub:#5b7077;--line:#d8e2e5;--acc:#0d7a6f;--accbg:#dff1ee;--star:#e0a100;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b1e;--card:#172a2e;--ink:#e6f0f1;--sub:#93aab0;--line:#264048;--acc:#4fd1c0;--accbg:#173b3a}}
+:root[data-theme="dark"]{--bg:#0f1b1e;--card:#172a2e;--ink:#e6f0f1;--sub:#93aab0;--line:#264048;--acc:#4fd1c0;--accbg:#173b3a}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "LXGW WenKai Lite","Noto Sans Thai",system-ui,sans-serif}
+main{max-width:560px;margin:0 auto;padding:0 16px 40px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:14px 0 10px;z-index:2}
+input{width:100%;padding:14px 16px;font:inherit;font-size:17px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+input:focus{outline:none;border-color:var(--acc)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 2px}
+.chips button{flex:none;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--sub);font:inherit;font-size:14px;cursor:pointer}
+.chips button.on{background:var(--acc);border-color:var(--acc);color:var(--bg);font-weight:600}
+.w{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-top:10px;background:var(--card);border:1px solid var(--line);border-radius:12px}
+.w .t{flex:1;cursor:pointer}
+.th{font-size:30px;font-weight:600;line-height:1.4;font-family:var(--thf,"Sarabun"),"Noto Sans Thai",sans-serif}
+.ro{color:var(--acc);font-size:15px}.tr{color:var(--sub);font-size:15px}
+.w button{border:0;background:none;font-size:22px;color:var(--line);cursor:pointer;padding:6px}
+.w button.f{color:var(--star)}
+.w:focus-within,.t:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.b{display:inline-block;margin-top:4px;padding:1px 10px;border-radius:999px;background:var(--accbg);color:var(--acc);font-size:13px}.ok{flex:none;border:1px solid var(--line)!important;border-radius:8px!important;font-size:13px!important;color:var(--acc)!important;padding:6px 10px!important}.sum{color:var(--sub);font-size:14px;margin-top:10px}
+.row{display:flex;gap:8px}.row input{flex:1;min-width:0}#fx,#add,#kbtn,#cbtn{flex:none;padding:0 12px;border:2px solid var(--line);border-radius:12px;background:var(--card);color:var(--acc);font:inherit;font-size:14px;cursor:pointer}
+#add{font-size:22px;line-height:1;padding:0 14px}.del{flex:none;font-size:15px!important;color:var(--sub)!important}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);width:min(92vw,520px);padding:18px}dialog::backdrop{background:rgba(0,0,0,.45)}dialog h3{margin:0 0 6px}
+textarea{width:100%;font:inherit;border:2px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);color:var(--ink)}
+.dbtn{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}.dbtn button{padding:8px 16px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;cursor:pointer}.dbtn #ds{background:var(--acc);color:var(--bg);border-color:var(--acc);font-weight:600}
+.addq{display:block;width:100%;margin-top:12px;padding:12px;border:2px dashed var(--acc);border-radius:12px;background:none;color:var(--acc);font:inherit;cursor:pointer}.sum .ok{margin-left:6px;padding:4px 10px;background:none;border-radius:8px;cursor:pointer}
+.kb{display:none;position:fixed;left:0;right:0;bottom:0;z-index:9;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--card);border-top:1px solid var(--line);max-height:55vh;overflow-y:auto}.kb.on{display:flex}
+.kb button{min-width:52px;height:56px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:32px var(--thf,"Sarabun"),"Noto Sans Thai",sans-serif;cursor:pointer}.kb .wd{min-width:120px;font-size:18px}
+body.kbo{padding-bottom:300px}
+input,textarea{font-family:var(--thf,"Sarabun"),"LXGW WenKai Lite","Noto Sans Thai",sans-serif}
+label{display:block;font-size:13px;color:var(--sub);margin-top:10px}.fld{width:100%;margin-top:4px;padding:10px;font-size:17px;font-family:var(--thf,"Sarabun"),"LXGW WenKai Lite","Noto Sans Thai",sans-serif;border:2px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.crow{display:flex;gap:6px;align-items:center;margin-top:8px}.crow input{flex:1;padding:8px 10px;font:inherit;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}.crow button{flex:none;border:1px solid var(--line);border-radius:8px;background:none;color:var(--sub);font-size:15px;padding:6px 10px;cursor:pointer}.crow .dh{flex:none;padding:6px 8px;font-size:18px;color:var(--sub);cursor:grab;touch-action:none;user-select:none}.crow.dragging{opacity:.5}
+.empty{text-align:center;color:var(--sub);padding:40px 0}
+</style></head><body><main>
+<header><div class="row"><input id="q" type="search" placeholder="輸入中文、英文、泰文或拼音" autocomplete="off"><button id="fx" aria-label="切換泰文字體"></button><button id="add" aria-label="新增單字">＋</button><button id="cbtn" aria-label="管理分類">⚙</button><button id="kbtn" aria-label="泰文鍵盤">ก</button></div>
+<div class="chips" id="chips"></div></header>
+<div id="list"></div>
+</main>
+<dialog id="dlg"><h3>新增單字</h3>
+<label>泰文（必填）<input id="f0" class="fld"></label>
+<label>拼音（可不填，聲調：à 低　â 降　á 高　ǎ 升　不標＝中）<input id="f1" class="fld"></label>
+<label>中文意思<input id="f2" class="fld"></label>
+<label>英文（可不填）<input id="f3" class="fld"></label>
+<label>分類<input id="f4" class="fld" placeholder="我的單字"></label>
+<div id="msg" class="sum"></div><div class="dbtn"><button id="kt">ก 泰文鍵盤</button><button id="dc">取消</button><button id="ds">加入</button></div></dialog>
+<dialog id="cdlg"><h3>管理分類標籤</h3><div class="sum">重新命名或刪除分類；刪除後該分類底下的字會移到「我的單字」，不會不見。</div><div id="crows"></div>
+<label>新增分類<input id="cnew" class="fld" placeholder="輸入新分類名稱"></label>
+<div class="dbtn"><button id="cclose">完成</button></div></dialog>
+<div id="kb" class="kb"></div>
+<script src="audio.js"></script>
+<script>
+const D=[["สวัสดี","sa-wat-dee","你好","hello","問候"],["ขอบคุณ","khop khun","謝謝","thank you","問候"],["ขอโทษ","kho thot","對不起","sorry","問候"],["ไม่เป็นไร","mai pen rai","沒關係","never mind","問候"],["ลาก่อน","la kon","再見","goodbye","問候"],["ใช่","chai","是","yes","問候"],["ไม่ใช่","mai chai","不是","no","問候"],["ช่วยด้วย","chuay duay","救命／請幫忙","help","問候"],["น้ำ","nam","水","water","飲食"],["ข้าว","khao","飯","rice","飲食"],["อาหาร","a-han","食物","food","飲食"],["อร่อย","a-roi","好吃","delicious","飲食"],["เผ็ด","phet","辣","spicy","飲食"],["ไม่เผ็ด","mai phet","不辣","not spicy","飲食"],["กาแฟ","ka-fae","咖啡","coffee","飲食"],["เบียร์","bia","啤酒","beer","飲食"],["หิว","hiu","餓","hungry","飲食"],["เช็คบิล","chek bin","結帳","the bill, please","飲食"],["น้ำแข็ง","nam khaeng","冰塊","ice","飲食"],["ผลไม้","phon-la-mai","水果","fruit","飲食"],["เท่าไหร่","thao rai","多少錢","how much","購物"],["แพง","phaeng","貴","expensive","購物"],["ถูก","thuk","便宜","cheap","購物"],["ลดหน่อย","lot noi","算便宜一點","discount, please","購物"],["ตลาด","ta-lat","市場","market","購物"],["เงิน","ngoen","錢","money","購物"],["ห้องน้ำ","hong nam","廁所","toilet","交通"],["ที่ไหน","thi nai","在哪裡","where","交通"],["รถไฟฟ้า","rot fai fa","輕軌／捷運","BTS / skytrain","交通"],["แท็กซี่","thaek-si","計程車","taxi","交通"],["สนามบิน","sa-nam bin","機場","airport","交通"],["ซ้าย","sai","左","left","交通"],["ขวา","khwa","右","right","交通"],["ตรงไป","trong pai","直走","straight ahead","交通"],["หยุด","yut","停","stop","交通"],["โรงแรม","rong raem","飯店","hotel","交通"],["หนึ่ง","nueng","一","one","數字"],["สอง","song","二","two","數字"],["สาม","sam","三","three","數字"],["สี่","si","四","four","數字"],["ห้า","ha","五","five","數字"],["สิบ","sip","十","ten","數字"],["ร้อย","roi","百","hundred","數字"],["พัน","phan","千","thousand","數字"],["วันนี้","wan ni","今天","today","日常"],["พรุ่งนี้","phrung ni","明天","tomorrow","日常"],["เมื่อวาน","mueang wan","昨天","yesterday","日常"],["ตอนนี้","ton ni","現在","now","日常"],["สบายดี","sa-bai dee","過得好／舒服","fine, comfortable","日常"],["สนุก","sa-nuk","好玩","fun","日常"],["รัก","rak","愛","love","日常"],["ร้อน","ron","熱","hot","日常"],["เข้าใจ","khao chai","了解","understand","日常"],["ไม่เข้าใจ","mai khao chai","不懂","don't understand","日常"],["ฉัน","chan","我","I, me","人物"],["ผม","phom","我（男生用）","I (male)","人物"],["คุณ","khun","你／您","you","人物"],["เขา","khao","他／她","he, she","人物"],["เรา","rao","我們","we","人物"],["เพื่อน","phuean","朋友","friend","人物"],["ครอบครัว","khrop-khrua","家人","family","人物"],["แม่","mae","媽媽","mother","人物"],["พ่อ","pho","爸爸","father","人物"],["ลูก","luk","孩子","child","人物"],["ครู","khru","老師","teacher","人物"],["หมอ","mo","醫生","doctor","人物"],["หัว","hua","頭","head","健康"],["ท้อง","thong","肚子","stomach","健康"],["มือ","mue","手","hand","健康"],["เท้า","thao","腳","foot","健康"],["ปวด","puat","痛（痠痛）","ache","健康"],["เจ็บ","chep","痛（受傷）","hurt","健康"],["ไข้","khai","發燒","fever","健康"],["ยา","ya","藥","medicine","健康"],["โรงพยาบาล","rong pha-ya-ban","醫院","hospital","健康"],["ร้านขายยา","ran khai ya","藥局","pharmacy","健康"],["แพ้","phae","過敏","allergic","健康"],["ท้องเสีย","thong sia","拉肚子","diarrhea","健康"],["ไอ","ai","咳嗽","cough","健康"],["เช้า","chao","早上","morning","時間"],["บ่าย","bai","下午","afternoon","時間"],["เย็น","yen","傍晚","evening","時間"],["คืน","khuen","夜晚","night","時間"],["วัน","wan","天／日","day","時間"],["สัปดาห์","sap-da","週","week","時間"],["เดือน","duean","月","month","時間"],["ปี","pi","年","year","時間"],["กี่โมง","ki mong","幾點","what time","時間"],["นาที","na-thi","分鐘","minute","時間"],["ชั่วโมง","chua-mong","小時","hour","時間"],["สีแดง","si daeng","紅色","red","顏色"],["สีขาว","si khao","白色","white","顏色"],["สีดำ","si dam","黑色","black","顏色"],["สีเขียว","si khiao","綠色","green","顏色"],["สีเหลือง","si lueang","黃色","yellow","顏色"],["สีน้ำเงิน","si nam ngoen","藍色","blue","顏色"],["ไป","pai","去","go","動詞"],["มา","ma","來","come","動詞"],["กิน","kin","吃","eat","動詞"],["ดื่ม","duem","喝","drink","動詞"],["นอน","non","睡覺","sleep","動詞"],["ซื้อ","sue","買","buy","動詞"],["ขาย","khai","賣","sell","動詞"],["อยาก","yak","想要","want","動詞"],["ชอบ","chop","喜歡","like","動詞"],["มี","mi","有","have","動詞"],["ไม่มี","mai mi","沒有","don't have","動詞"],["พูด","phut","說","speak","動詞"],["ดู","du","看","look, watch","動詞"],["ฟัง","fang","聽","listen","動詞"],["เรียน","rian","學習","study","動詞"],["ทำงาน","tham ngan","工作","work","動詞"],["รอ","ro","等","wait","動詞"],["เปิด","poet","開","open","動詞"],["ปิด","pit","關","close","動詞"],["ใหญ่","yai","大","big","形容詞"],["เล็ก","lek","小","small","形容詞"],["ดี","di","好","good","形容詞"],["ไม่ดี","mai di","不好","not good","形容詞"],["สวย","suay","漂亮","beautiful","形容詞"],["ใหม่","mai","新","new","形容詞"],["เก่า","kao","舊","old","形容詞"],["เร็ว","reo","快","fast","形容詞"],["ช้า","cha","慢","slow","形容詞"],["หนาว","nao","冷","cold","形容詞"],["ใกล้","klai","近","near","形容詞"],["ไกล","klai","遠","far","形容詞"],["มาก","mak","很多／很","a lot, very","形容詞"],["น้อย","noi","少／一點","little","形容詞"],["สะอาด","sa-at","乾淨","clean","形容詞"],["เหนื่อย","nueai","累","tired","形容詞"],["ที่พัก","thi phak","住宿","accommodation","住宿"],["ห้อง","hong","房間","room","住宿"],["เตียง","tiang","床","bed","住宿"],["แอร์","ae","冷氣","air conditioner","住宿"],["กุญแจ","kun-chae","鑰匙","key","住宿"],["ไวไฟ","wai-fai","Wi-Fi","Wi-Fi","住宿"],["รหัสผ่าน","ra-hat phan","密碼","password","住宿"],["เช็คอิน","chek-in","入住","check-in","住宿"],["เช็คเอาท์","chek-aut","退房","check-out","住宿"],["รถเมล์","rot me","公車","bus","交通"],["เรือ","ruea","船","boat","交通"],["ตั๋ว","tua","票","ticket","交通"],["สถานี","sa-tha-ni","車站","station","交通"],["เลี้ยว","liao","轉彎","turn","交通"],["มอเตอร์ไซค์","mo-toe-sai","機車","motorbike","交通"],["ตุ๊กตุ๊ก","tuk-tuk","嘟嘟車","tuk-tuk","交通"],["ไก่","kai","雞肉","chicken","飲食"],["หมู","mu","豬肉","pork","飲食"],["ปลา","pla","魚","fish","飲食"],["กุ้ง","kung","蝦","shrimp","飲食"],["ไข่","khai","蛋","egg","飲食"],["ผัก","phak","蔬菜","vegetable","飲食"],["น้ำตาล","nam-tan","糖","sugar","飲食"],["เกลือ","kluea","鹽","salt","飲食"],["ทอด","thot","炸","fried","飲食"],["ก๋วยเตี๋ยว","kuai-tiao","麵","noodles","飲食"],["ผัดไทย","phat thai","泰式炒河粉","pad thai","飲食"],["ส้มตำ","som tam","涼拌青木瓜","papaya salad","飲食"],["ต้มยำ","tom yam","東炎湯（酸辣湯）","tom yum soup","飲食"],["มะม่วง","ma-muang","芒果","mango","飲食"],["ชา","cha","茶","tea","飲食"],["นม","nom","牛奶","milk","飲食"],["กินเจ","kin che","吃素","vegetarian","飲食"],["ไม่ใส่ผักชี","mai sai phak chi","不要香菜","no coriander","飲食"],["ร้าน","ran","店","shop","購物"],["ห้าง","hang","百貨公司","mall","購物"],["ถุง","thung","袋子","bag","購物"],["เงินสด","ngoen sot","現金","cash","購物"],["บัตรเครดิต","bat khre-dit","信用卡","credit card","購物"],["เงินทอน","ngoen thon","找零","change","購物"],["ขนาด","kha-nat","尺寸","size","購物"],["ลอง","long","試","try","購物"],["ชื่อ","chue","名字","name","日常"],["อะไร","a-rai","什麼","what","日常"],["ใคร","khrai","誰","who","日常"],["ทำไม","tham-mai","為什麼","why","日常"],["เมื่อไหร่","mue-rai","什麼時候","when","日常"],["อย่างไร","yang-rai","怎麼樣","how","日常"],["ได้","dai","可以","can","日常"],["ไม่ได้","mai dai","不行","cannot","日常"],["ได้ไหม","dai mai","可以嗎","is it OK","日常"],["ขอ","kho","請給我","may I have","日常"],["ยินดีต้อนรับ","yin-di ton-rap","歡迎","welcome","日常"],["ยินดีที่ได้รู้จัก","yin-di thi dai ru-chak","很高興認識你","nice to meet you","日常"],["พูดช้าๆ หน่อย","phut cha-cha noi","請說慢一點","please speak slowly","日常"],["พูดอังกฤษได้ไหม","phut ang-krit dai mai","會說英文嗎","do you speak English","日常"],["ศูนย์","suun","零","zero","數字"],["หก","hok","六","six","數字"],["เจ็ด","chet","七","seven","數字"],["แปด","paet","八","eight","數字"],["เก้า","kao","九","nine","數字"],["ยี่สิบ","yi-sip","二十","twenty","數字"],["หมื่น","muen","萬","ten thousand","數字"],["ครึ่ง","khrueng","一半","half","數字"],["ฉุกเฉิน","chuk-choen","緊急","emergency","緊急"],["ตำรวจ","tam-ruat","警察","police","緊急"],["ไฟไหม้","fai mai","火災","fire","緊急"],["หลงทาง","long thang","迷路","lost (way)","緊急"],["หาย","hai","遺失／不見","missing, lost","緊急"],["โดนขโมย","don kha-moi","被偷","got robbed","緊急"],["อุบัติเหตุ","u-bat-ti-het","事故","accident","緊急"],["รถพยาบาล","rot pha-ya-ban","救護車","ambulance","緊急"],["สถานทูต","sa-tha-thut","大使館","embassy","緊急"],["หนังสือเดินทาง","nang-sue doen-thang","護照","passport","緊急"],["ร้านอาหาร","ran a-han","餐廳","restaurant","地點"],["วัด","wat","寺廟","temple","地點"],["ทะเล","tha-le","海","sea","地點"],["ชายหาด","chai-hat","海灘","beach","地點"],["ภูเขา","phu-khao","山","mountain","地點"],["ธนาคาร","tha-na-khan","銀行","bank","地點"],["ตู้เอทีเอ็ม","tu e-thi-em","提款機","ATM","地點"],["ร้านสะดวกซื้อ","ran sa-duak sue","便利商店","convenience store","地點"],["โรงเรียน","rong-rian","學校","school","地點"],["สวน","suan","公園／花園","park, garden","地點"],["พิพิธภัณฑ์","phi-phit-tha-phan","博物館","museum","地點"],["บ้าน","ban","家／房子","home, house","地點"],["ประเทศไทย","pra-thet thai","泰國","Thailand","地點"],["กรุงเทพ","krung-thep","曼谷","Bangkok","地點"],["เชียงใหม่","chiang-mai","清邁","Chiang Mai","地點"],["ไต้หวัน","tai-wan","台灣","Taiwan","地點"],["ที่นี่","thi ni","這裡","here","地點"],["ที่นั่น","thi nan","那裡","there","地點"],["ฝน","fon","雨","rain","天氣"],["แดด","daet","陽光","sunshine","天氣"],["ลม","lom","風","wind","天氣"],["เมฆ","mek","雲","cloud","天氣"],["อากาศ","a-kat","天氣／空氣","weather, air","天氣"],["ฤดูฝน","rue-du fon","雨季","rainy season","天氣"],["หมา","ma","狗","dog","動物"],["แมว","maeo","貓","cat","動物"],["ช้าง","chang","大象","elephant","動物"],["นก","nok","鳥","bird","動物"],["วัว","wua","牛","cow","動物"],["ลิง","ling","猴子","monkey","動物"],["งู","ngu","蛇","snake","動物"],["โทรศัพท์","tho-ra-sap","手機／電話","phone","物品"],["กระเป๋า","kra-pao","包包","bag","物品"],["หนังสือ","nang-sue","書","book","物品"],["ร่ม","rom","雨傘","umbrella","物品"],["แว่นตา","waen ta","眼鏡","glasses","物品"],["นาฬิกา","na-li-ka","時鐘／手錶","clock, watch","物品"],["รองเท้า","rong-thao","鞋子","shoes","物品"],["เสื้อ","suea","上衣","shirt","物品"],["กางเกง","kang-keng","褲子","pants","物品"],["แบตเตอรี่","bat-toe-ri","電池","battery","物品"],["ที่ชาร์จ","thi chat","充電器","charger","物品"],["ปลั๊ก","plak","插頭","plug","物品"],["กล้อง","klong","相機","camera","物品"],["ซิมการ์ด","sim-kat","SIM 卡","SIM card","物品"],["รู้","ru","知道","know","動詞"],["คิด","khit","想／思考","think","動詞"],["เดิน","doen","走路","walk","動詞"],["วิ่ง","wing","跑","run","動詞"],["นั่ง","nang","坐","sit","動詞"],["ยืน","yuen","站","stand","動詞"],["ขับ","khap","開（車）","drive","動詞"],["จ่าย","chai","付款","pay","動詞"],["จอง","chong","預訂","book, reserve","動詞"],["ถาม","tham","問","ask","動詞"],["ตอบ","top","回答","answer","動詞"],["เขียน","khian","寫","write","動詞"],["อ่าน","an","讀","read","動詞"],["หา","ha","找","look for","動詞"],["ลืม","luem","忘記","forget","動詞"],["จำ","cham","記得","remember","動詞"],["เริ่ม","roem","開始","start","動詞"],["โทร","tho","打電話","call","動詞"],["อาบน้ำ","ap nam","洗澡","take a shower","動詞"],["สูง","sung","高","tall, high","形容詞"],["ต่ำ","tam","低","low","形容詞"],["หนัก","nak","重","heavy","形容詞"],["เบา","bao","輕","light","形容詞"],["อิ่ม","im","飽","full","形容詞"],["ยาก","yak","難","difficult","形容詞"],["ง่าย","ngai","容易","easy","形容詞"],["ว่าง","wang","空的／有空","empty, free","形容詞"],["แน่น","naen","擠／滿","crowded, tight","形容詞"],["ปลอดภัย","plot-phai","安全","safe","形容詞"],["อันตราย","an-ta-rai","危險","dangerous","形容詞"],["น่ารัก","na-rak","可愛","cute","形容詞"],["หวาน","wan","甜","sweet","飲食"],["เปรี้ยว","priao","酸","sour","飲食"],["เค็ม","khem","鹹","salty","飲食"],["ขม","khom","苦","bitter","飲食"],["ครับ","khrap","（男性語尾，禮貌用語）","polite particle (male)","用語"],["ค่ะ","kha","（女性語尾，肯定句）","polite particle (female)","用語"],["คะ","kha","（女性語尾，疑問句）","polite particle (female, question)","用語"],["นะ","na","語氣詞（請求、緩和）","softening particle","用語"],["ไหม","mai","嗎（疑問詞）","question particle","用語"],["ไม่รู้","mai ru","不知道","don't know","用語"],["เอา","ao","要","want, take","用語"],["ไม่เอา","mai ao","不要","don't want","用語"],["พอแล้ว","pho laeo","夠了","enough","用語"],["ขออีก","kho ik","再一個","one more","用語"],["อันนี้","an ni","這個","this one","用語"],["อันนั้น","an nan","那個","that one","用語"],["ขอดูเมนูหน่อย","kho du me-nu noi","請給我看菜單","may I see the menu","用語"],["คิดเงินด้วย","khit ngoen duai","請結帳","check, please","用語"],["สบายดีไหม","sa-bai di mai","你好嗎","how are you","用語"]];
+let custom=[];try{custom=JSON.parse(localStorage.getItem("thcustom")||"[]")}catch(e){}
+custom=custom.filter(c=>!D.some(d=>d[0]==c[0]));D.push(...custom);
+let miss={};try{miss=JSON.parse(localStorage.getItem("thmiss")||"{}")}catch(e){}
+function saveM(){try{localStorage.setItem("thmiss",JSON.stringify(miss))}catch(e){}}
+let qk="",smp=null;
+try{claude.use("sample").then(x=>{if(x){smp=x;draw()}})}catch(e){}
+async function ask(w,b){const o=b.textContent;b.disabled=true;b.textContent="查詢中…";
+ try{const r=await smp.json('你是泰語字典。查詢詞：「'+w+'」（可能是中文、英文、泰文或羅馬拼音）。只回覆一個 JSON 物件：{"thai":"泰文","roman":"羅馬拼音，需標示聲調：中平調不標符號，低調用重音符 à，降調用揚抑符 â，高調用尖音符 á，升調用抑揚符 ǎ，音節間用連字號分隔，例如 sà-wàt-dii","zh":"繁體中文釋義","en":"English","cat":"從 問候、飲食、購物、交通、數字、日常、人物、健康、時間、顏色、動詞、形容詞、住宿 選一個"}。若不確定或不是泰語相關詞彙，thai 填空字串。',{modelTier:"quick"});
+  if(!r||!r.thai){b.textContent="查不到，請手動新增"}else{openAdd("");qk=w.toLowerCase();$("f0").value=r.thai||"";$("f1").value=r.roman||"";$("f2").value=r.zh||"";$("f3").value=r.en||"";$("f4").value=r.cat||"";$("msg").textContent="這是 AI 查的結果，請確認無誤再按「加入」";b.textContent=o}
+ }catch(e){b.textContent=e.code=="not_granted"?"未授權使用":"查詢失敗，稍後再試"}
+ b.disabled=false}
+function openAdd(w){qk=(w||"").toLowerCase();["f0","f1","f2","f3","f4"].forEach(i=>$(i).value="");
+ if(w)(/[\u0E00-\u0E7F]/.test(w)?$("f0"):$("f2")).value=w;
+ $("msg").textContent="";$("dlg").showModal();$("dlg").appendChild($("kb"));$("f0").focus()}
+function addBtn(q){const b=document.createElement("button");b.className="addq";b.textContent="＋ 新增「"+q+"」";b.onclick=()=>openAdd(q);$("list").appendChild(b);
+ if(smp){const a=document.createElement("button");a.className="addq";a.textContent="✨ 請 Claude 查「"+q+"」";a.onclick=()=>ask(q,a);$("list").appendChild(a)}}
+function renderMiss(){const L=$("list"),ks=Object.keys(miss).sort((a,b)=>miss[b].last-miss[a].last);
+ L.innerHTML=ks.length?'<div class="sum">這些是你搜尋過但字庫裡沒有的字。按「新增」補上拼音和意思，或複製清單貼給 Claude 幫你查。 <button id="cp" class="ok">複製清單</button></div>':'<div class="empty">還沒有查不到的字。搜尋沒有結果的字會自動記在這裡</div>';
+ const cp=$("cp");if(cp)cp.onclick=()=>{try{navigator.clipboard.writeText(ks.join("\n")).then(()=>cp.textContent="已複製",()=>cp.textContent="無法複製")}catch(e){cp.textContent="無法複製"}};
+ ks.forEach(k=>{const e=document.createElement("div");e.className="w";
+  e.innerHTML='<div class="t"><div class="th" style="font-size:22px"></div><span class="b">搜尋 '+miss[k].n+' 次</span></div><button class="ok">新增</button>'+(smp?'<button class="ok ai">AI 查</button>':'')+'<button class="del">✕</button>';
+  e.querySelector(".th").textContent=k;
+  e.querySelector(".ok").onclick=()=>openAdd(k);const ai=e.querySelector(".ai");if(ai)ai.onclick=ev=>ask(k,ev.target);
+  e.querySelector(".del").onclick=()=>{delete miss[k];saveM();renderMiss()};
+  L.appendChild(e)})}
+let mt;
+function saveC(){try{localStorage.setItem("thcustom",JSON.stringify(custom))}catch(e){}}
+let catops={rename:{},extra:[],order:[]};try{catops=Object.assign({rename:{},extra:[],order:[]},JSON.parse(localStorage.getItem("thcatops")||"{}"))}catch(e){}
+function saveCatops(){try{localStorage.setItem("thcatops",JSON.stringify(catops))}catch(e){}}
+Object.entries(catops.rename).forEach(([from,to])=>D.forEach(d=>{if(d[4]==from)d[4]=to}));
+function resolveOrder(names){const ord=(catops.order||[]).filter(n=>names.includes(n));const extra=names.filter(n=>!ord.includes(n));return [...ord,...extra]}
+const CATS=()=>["全部","★ 收藏","最近查過","易忘","查不到",...resolveOrder([...new Set([...D.map(d=>d[4]),...catops.extra])])];
+let cat="全部",fav=new Set();
+try{fav=new Set(JSON.parse(localStorage.getItem("thfav")||"[]"))}catch(e){}
+const $=id=>document.getElementById(id);
+let hist={};try{hist=JSON.parse(localStorage.getItem("thhist")||"{}")}catch(e){}
+function saveH(){try{localStorage.setItem("thhist",JSON.stringify(hist))}catch(e){}}
+function log(w){const h=hist[w]||(hist[w]={n:0,last:0,ok:0});h.n++;h.last=Date.now();h.ok=0;saveH()}
+function save(){try{localStorage.setItem("thfav",JSON.stringify([...fav]))}catch(e){}}
+function pv(){const v=speechSynthesis.getVoices().filter(x=>x.lang.replace("_","-").toLowerCase().startsWith("th"));return v.find(x=>/premium|enhanced|natural|neural/i.test(x.name))||v.find(x=>/google/i.test(x.name))||v[0]}
+function speak(t){const a=window.AUDIO&&window.AUDIO[t];if(a){new Audio(a).play().catch(()=>{});return}try{const u=new SpeechSynthesisUtterance(t);u.lang="th-TH";const v=pv();if(v)u.voice=v;u.rate=.8;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function draw(){
+ if(cat=="查不到")return renderMiss();
+ const q=$("q").value.trim().toLowerCase(),H=w=>hist[w]||{n:0,last:0,ok:0};
+ let r=D.filter(d=>(!q||d.slice(0,4).join(" ").toLowerCase().includes(q)));
+ if(cat=="★ 收藏")r=r.filter(d=>fav.has(d[0]));
+ else if(cat=="最近查過")r=r.filter(d=>H(d[0]).n).sort((x,y)=>H(y[0]).last-H(x[0]).last);
+ else if(cat=="易忘")r=r.filter(d=>H(d[0]).n>=2&&!H(d[0]).ok).sort((x,y)=>H(y[0]).n-H(x[0]).n||H(y[0]).last-H(x[0]).last);
+ else if(cat!="全部")r=r.filter(d=>d[4]==cat);
+ const L=$("list");
+ L.innerHTML=r.length?"":'<div class="empty">'+(cat=="易忘"?"目前沒有易忘的字。同一個字查到第 2 次，就會出現在這裡":cat=="最近查過"?"還沒有查詢紀錄，點單字卡就會記下來":"找不到符合的單字，換個關鍵字試試")+"</div>";
+ if(cat=="易忘"&&r.length)L.innerHTML='<div class="sum">依查詢次數排序，查越多次越容易忘。記住了就按右邊的按鈕移出清單。</div>';
+ r.forEach(d=>{const h=H(d[0]),e=document.createElement("div");e.className="w";
+  e.innerHTML=`<div class="t" tabindex="0" role="button" aria-label="播放發音"><div class="th">${d[0]}</div><div class="ro">${d[1]}</div><div class="tr">${d[2]}${d[3]?" · "+d[3]:""}</div>${h.n?`<span class="b">查過 ${h.n} 次</span>`:""}</div>${cat=="易忘"?'<button class="ok">記住了</button>':""}${d[5]?'<button class="del" aria-label="刪除">✕</button>':""}<button class="${fav.has(d[0])?"f":""}" aria-label="收藏">★</button>`;
+  const t=e.firstChild,go=()=>{speak(d[0]);log(d[0]);t.querySelector(".b")?t.querySelector(".b").textContent="查過 "+hist[d[0]].n+" 次":t.insertAdjacentHTML("beforeend",'<span class="b">查過 1 次</span>')};
+  t.onclick=go;t.onkeydown=k=>{if(k.key=="Enter")go()};
+  const ok=e.querySelector(".ok");if(ok)ok.onclick=()=>{hist[d[0]].ok=1;saveH();draw()};
+  const dl=e.querySelector(".del");if(dl)dl.onclick=()=>{custom=custom.filter(c=>c[0]!=d[0]);D.splice(D.indexOf(d),1);saveC();chips();draw()};
+  e.lastChild.onclick=()=>{fav.has(d[0])?fav.delete(d[0]):fav.add(d[0]);save();draw()};
+  L.appendChild(e)});
+ if(!r.length&&q&&cat!="易忘"&&cat!="最近查過"&&cat!="★ 收藏")addBtn($("q").value.trim());
+}
+function chips(){$("chips").innerHTML=CATS().map(c=>`<button class="${c==cat?"on":""}">${c}</button>`).join("")}chips();
+$("chips").onclick=e=>{if(e.target.tagName!="BUTTON")return;cat=e.target.textContent;[...$("chips").children].forEach(b=>b.classList.toggle("on",b==e.target));draw()};
+const FN=[["Sarabun","標準體"],["Noto Sans Thai","無圈體"]];let fi=0;
+try{fi=+localStorage.getItem("thfont")||0}catch(e){}
+function setF(){document.documentElement.style.setProperty("--thf",'"'+FN[fi][0]+'"');$("fx").textContent=FN[fi][1]}
+$("fx").onclick=()=>{fi=(fi+1)%FN.length;try{localStorage.setItem("thfont",fi)}catch(e){}setF()};setF();
+$("add").onclick=()=>openAdd("");
+function renderCats(){const fixed=new Set(["全部","★ 收藏","最近查過","易忘","查不到"]);
+ const names=CATS().filter(c=>!fixed.has(c));
+ catops.order=names;
+ $("crows").innerHTML="";
+ names.forEach(name=>{const r=document.createElement("div");r.className="crow";r.dataset.name=name;
+  r.innerHTML=`<span class="dh" aria-label="拖曳排序">⠿</span><input value="${name}"><button class="del">刪除</button>`;
+  const inp=r.querySelector("input");
+  inp.onchange=()=>{const v=inp.value.trim();if(!v||v==name)return;
+   D.forEach(d=>{if(d[4]==name)d[4]=v});catops.rename[name]=v;
+   catops.extra=catops.extra.filter(x=>x!=name);
+   catops.order=catops.order.map(n=>n==name?v:n);
+   if(cat==name)cat=v;saveCatops();saveC();chips();draw();renderCats()};
+  r.querySelector(".del").onclick=()=>{
+   D.forEach(d=>{if(d[4]==name)d[4]="我的單字"});
+   catops.rename[name]="我的單字";
+   catops.extra=catops.extra.filter(x=>x!=name);
+   catops.order=catops.order.filter(x=>x!=name);
+   if(cat==name)cat="全部";saveCatops();saveC();chips();draw();renderCats()};
+  $("crows").appendChild(r)});
+ enableDrag()}
+function enableDrag(){let dragEl=null;
+ $("crows").querySelectorAll(".crow").forEach(row=>{const h=row.querySelector(".dh");
+  h.onpointerdown=e=>{dragEl=row;row.classList.add("dragging");h.setPointerCapture(e.pointerId)};
+  h.onpointermove=e=>{if(!dragEl)return;
+   const rows=[...$("crows").querySelectorAll(".crow")].filter(r=>r!==dragEl);
+   const after=rows.find(r=>e.clientY<r.getBoundingClientRect().top+r.getBoundingClientRect().height/2);
+   if(after)$("crows").insertBefore(dragEl,after);else $("crows").appendChild(dragEl)};
+  h.onpointerup=()=>{if(!dragEl)return;dragEl.classList.remove("dragging");dragEl=null;
+   catops.order=[...$("crows").querySelectorAll(".crow")].map(r=>r.dataset.name);saveCatops();chips()}})}
+$("cbtn").onclick=()=>{renderCats();$("cdlg").showModal()};
+$("cclose").onclick=()=>$("cdlg").close();
+$("cnew").onkeydown=e=>{if(e.key!="Enter")return;const v=$("cnew").value.trim();if(!v)return;
+ if(!CATS().includes(v))catops.extra.push(v);saveCatops();$("cnew").value="";chips();renderCats()};
+$("dc").onclick=()=>$("dlg").close();
+$("ds").onclick=()=>{
+ const t=$("f0").value.trim();
+ if(!t){$("msg").textContent="請至少輸入泰文";return}
+ if(D.some(d=>d[0]==t)){$("msg").textContent="這個字已經在字庫裡了";return}
+ const w=[t,$("f1").value.trim(),$("f2").value.trim(),$("f3").value.trim(),$("f4").value.trim()||"我的單字",1];
+ custom.push(w);D.push(w);
+ Object.keys(miss).forEach(k=>{if([w[0],w[2],w[3]].some(x=>x&&x.toLowerCase()==k))delete miss[k]});
+ if(qk)delete miss[qk];saveM();saveC();chips();draw();$("dlg").close()};
+const KC="กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮะาำเแโใไๆฯ";
+$("kb").innerHTML=[...KC].map(c=>`<button data-c="${c}">${c}</button>`).join("")+[..."ัิีึืุู็่้๊๋์"].map(c=>`<button data-c="${c}">อ${c}</button>`).join("")+'<button data-c=" " class="wd">空格</button><button data-c="⌫" class="wd">⌫</button>';
+$("kb").onpointerdown=e=>e.preventDefault();
+let lastF=null;document.addEventListener("focusin",e=>{if(e.target.matches("#q,.fld"))lastF=e.target});
+$("kb").onclick=e=>{const c=e.target.dataset.c;if(!c)return;const t=lastF&&document.contains(lastF)?lastF:($("dlg").open?$("f0"):$("q"));t.focus();
+ const a=t.selectionStart??t.value.length,b=t.selectionEnd??a;
+ if(c=="⌫")t.setRangeText("",a==b?Math.max(0,a-1):a,b,"end");else t.setRangeText(c,a,b,"end");
+ t.dispatchEvent(new Event("input"))};
+function tk(){$("kb").classList.toggle("on");document.body.classList.toggle("kbo",$("kb").classList.contains("on"))}
+$("kbtn").onclick=tk;$("kt").onclick=tk;$("dlg").onclose=()=>document.body.appendChild($("kb"));
+$("q").oninput=()=>{draw();clearTimeout(mt);mt=setTimeout(()=>{const q=$("q").value.trim().toLowerCase();if(q&&!D.some(d=>d.slice(0,4).join(" ").toLowerCase().includes(q))){const m=miss[q]||(miss[q]={n:0,last:0});m.n++;m.last=Date.now();saveM()}},1500)};draw();
+</script></body></html>
