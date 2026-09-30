@@ -99,7 +99,7 @@ let mt;
 function saveC(){try{localStorage.setItem("thcustom",JSON.stringify(custom))}catch(e){}}
 let catops={rename:{},extra:[],order:[],wordCat:{},hidden:[]};try{catops=Object.assign({rename:{},extra:[],order:[],wordCat:{},hidden:[]},JSON.parse(localStorage.getItem("thcatops")||"{}"))}catch(e){}
 function saveCatops(){try{localStorage.setItem("thcatops",JSON.stringify(catops))}catch(e){}}
-catops.hidden.forEach(th=>{const idx=D.findIndex(d=>d[0]==th);if(idx>-1)D.splice(idx,1)});
+if(catops.hidden&&catops.hidden.length){catops.hidden=[];saveCatops()}
 Object.entries(catops.rename).forEach(([from,to])=>D.forEach(d=>{if(d[4]==from)d[4]=to}));
 Object.entries(catops.wordCat).forEach(([th,c])=>{const d=D.find(d=>d[0]==th);if(d)d[4]=c});
 const CATS=()=>["全部","★ 收藏","最近查過","我的單字","易忘",...catops.extra.filter(c=>c!="我的單字")];
@@ -150,7 +150,7 @@ $("bulkDel").onclick=()=>{if(!selected.size)return;
  delArm=false;$("bulkDel").textContent="刪除";
  [...selected].forEach(th=>{const idx=D.findIndex(d=>d[0]==th);if(idx<0)return;
   if(custom.some(c=>c[0]==th)){custom=custom.filter(c=>c[0]!=th);D.splice(idx,1)}
-  else{catops.hidden.push(th);D.splice(idx,1)}});
+  else{D[idx][4]="未分類";catops.wordCat[th]="未分類"}});
  saveC();saveCatops();selected.clear();selMode=false;chips();draw()};
 function chips(){$("chips").innerHTML=CATS().map(c=>`<button class="${c==cat?"on":""}">${c}</button>`).join("")}chips();
 function openMove(target){const isBulk=Array.isArray(target);
